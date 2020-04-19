@@ -47,6 +47,7 @@ while True:
             server.login(gmail + "@gmail.com", password)
             server.sendmail(gmail, receiver_gmail + "@gmail.com", email_message)
         print("Change detected - email sent!")
+        source = new_source
 
     time.sleep(sleep)
 
