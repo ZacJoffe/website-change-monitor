@@ -34,11 +34,11 @@ Subject: Website has changed
 print("Starting website polling...")
 
 source = get_source(url)
-# time.sleep(60)
+time.sleep(60)
 
 while True:
     new_source = get_source(url)
-    if source == new_source:
+    if source != new_source:
         # Create a secure SSL context
         with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
             server.login(gmail + "@gmail.com", password)
