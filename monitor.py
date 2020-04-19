@@ -9,12 +9,13 @@ def get_source(url):
     response = requests.get(url)
     return BeautifulSoup(response.text, "lxml")
 
-port = 465  # For SSL
-gmail = input("Gmail: ")
+gmail = input("Gmail sender: ")
 password = input("Password: ")
+receiver_gmail = input("Gmail receiver: ")
 url = input("URL: ")
 
-# Create a secure SSL context
+
+port = 465  # For SSL
 context = ssl.create_default_context()
 message = """\
 Subject: Website has changed
@@ -26,9 +27,10 @@ source = get_source(url)
 while True:
     new_source = get_source(url)
     if source == new_source:
+        # Create a secure SSL context
         with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
             server.login(gmail + "@gmail.com", password)
-            server.sendmail(gmail, "zacharyjoffe@gmail.com", message)
+            server.sendmail(gmail, receiver_gmail + "@gmail.com", message)
         print("Change detected - email sent!")
 
     time.sleep(60)
