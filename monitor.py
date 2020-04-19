@@ -24,15 +24,16 @@ password = args.password
 receiver_gmail = args.receiver
 url = args.url
 
-port = 465  # For SSL
-context = ssl.create_default_context()
-message = """\
+ssl_port = 465
+ssl_context = ssl.create_default_context()
+email_message = """\
 Subject: Website has changed
 
 {website} has changed!""".format(website=url)
 
 print("Starting website polling...")
 
+# get the initial source of the webpage, and sleep before trying again in the loop
 source = get_source(url)
 time.sleep(60)
 
@@ -40,9 +41,9 @@ while True:
     new_source = get_source(url)
     if source != new_source:
         # Create a secure SSL context
-        with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+        with smtplib.SMTP_SSL("smtp.gmail.com", ssl_port, context=ssl_context) as server:
             server.login(gmail + "@gmail.com", password)
-            server.sendmail(gmail, receiver_gmail + "@gmail.com", message)
+            server.sendmail(gmail, receiver_gmail + "@gmail.com", email_message)
         print("Change detected - email sent!")
 
     time.sleep(60)
