@@ -16,6 +16,10 @@ url = input("URL: ")
 
 # Create a secure SSL context
 context = ssl.create_default_context()
+message = """\
+Subject: Website has changed
+
+{website} has changed!""".format(website=url)
 
 source = get_source(url)
 
@@ -24,7 +28,7 @@ while True:
     if source == new_source:
         with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
             server.login(gmail + "@gmail.com", password)
-            server.sendmail(gmail, "zacharyjoffe@gmail.com", "Change in website: " + url)
+            server.sendmail(gmail, "zacharyjoffe@gmail.com", message)
         print("Change detected - email sent!")
 
     time.sleep(60)
